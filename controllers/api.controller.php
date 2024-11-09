@@ -1,8 +1,8 @@
 <?php
 
 require_once 'models/comentarios.model.php';
-require_once 'models/canciones.model.php'
-require_once 'api.view.php';
+require_once 'models/canciones.model.php';
+require_once 'views/api.view.php';
 
 class ApiController {
 
@@ -48,12 +48,14 @@ class ApiController {
         $autor = $req->body->autor;
         $positivo = $req->body->positivo;
         $comentario = $req->body->comentario;
+        $id_cancion = $req->body->id_cancion;
 
-        if(empty($autor) || empty($positivo) || empty($comentario)){
+    
+        if(empty($autor) || empty($positivo) || empty($comentario) && empty($id_cancion)){
             return $this->view->response("Faltan completar campos", 401);
         }
 
-        $editado = $this->model->updateComentario($autor, $positivo, $comentario, $id_comentario);
+        $editado = $this->modelComentarios->updateComentario($autor, $positivo, $comentario, $id_cancion, $id_comentario);
 
         return $this->view->response($editado, 200);
 
