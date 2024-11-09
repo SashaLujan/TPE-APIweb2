@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-11-2024 a las 21:04:50
+-- Tiempo de generación: 09-11-2024 a las 22:01:24
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -71,6 +71,7 @@ INSERT INTO `canciones` (`id_cancion`, `nombre_cancion`, `letra`, `genero`, `id_
 CREATE TABLE `comentarios` (
   `id_comentario` int(11) NOT NULL,
   `autor` varchar(255) DEFAULT NULL,
+  `positivo` tinyint(1) NOT NULL,
   `comentario` text NOT NULL,
   `id_cancion_fk` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
