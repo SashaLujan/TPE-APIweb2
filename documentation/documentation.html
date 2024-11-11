@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>API tuletra Documentation</title>
+        <!-- Incluye el CSS de Swagger UI -->
+        <link rel="stylesheet" href="../libs/swaggerUI/swagger-ui.css">
+    </head>
+
+    <body>
+        <div id="swagger-ui"></div>
+
+        <!-- Incluye los archivos JavaScript de Swagger UI -->
+        <script src="../libs/swaggerUI/swagger-ui-bundle.js"></script>
+        <script src="../libs/swaggerUI/swagger-ui-standalone-preset.js"></script>
+        <script>
+            window.onload = () => {
+                SwaggerUIBundle({
+                    url: "../documentation/doc-tuletra.json",
+                    dom_id: "#swagger-ui",
+                    presets: [
+                        SwaggerUIBundle.presets.apis,
+                        SwaggerUIStandalonePreset
+                    ],
+                    layout: "BaseLayout",
+                });
+            };
+        </script>
+    </body>
+</html>

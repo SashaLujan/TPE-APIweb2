@@ -1,0 +1,369 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API - TuLetra",
+    "description": "Esta es la documentación acerca de la api de **Tu letra** para la materia web 2 de la Tudai. La misma fue realizada con Swagger Editor bajo la especificación de OpenAPI V3.",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost/TPE-APIweb2/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "comentarios",
+      "description": "comentarios anonimos de las canciones de tuletra"
+    }
+  ],
+  "paths": {
+    "/comentarios": {
+      "get": {
+        "tags": [
+          "comentarios"
+        ],
+        "summary": "Recupera todos los comentarios",
+        "description": "Recupera un listado de todos los comentarios.",
+        "operationId": "getAll",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "El numero de pagina del listado de comentarios.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "La cantidad de comentarios por pagina.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/listadoComentarios"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parámetros inválidos",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalidParameters": {
+                    "$ref": "#/components/examples/InvalidParameters"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existen comentarios para esa pagina",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalidParameters": {
+                    "$ref": "#/components/examples/NotFound"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "comentarios"
+        ],
+        "summary": "Crear un comentario",
+        "description": "Crear un nuevo comentario para una cancion.",
+        "operationId": "createComment",
+        "requestBody": {
+          "description": "Created user object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComentarioReqBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comentario"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comentarios/{idComentario}": {
+      "get": {
+        "tags": [
+          "comentarios"
+        ],
+        "summary": "comentario por su id",
+        "description": "Trae un comentario por su id",
+        "operationId": "getComentarioById",
+        "parameters": [
+          {
+            "name": "idComentario",
+            "in": "path",
+            "description": "El id del comentario a recuperar. debe ser un valor numerico entero.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comentario"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "comentarios"
+        ],
+        "summary": "Update user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "idComentario",
+            "in": "path",
+            "description": "name that need to be deleted",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update an existent user in the store",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComentarioReqBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "comentarios"
+        ],
+        "summary": "Delete user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "idComentario",
+            "in": "path",
+            "description": "The name that needs to be deleted",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/canciones/{idCancion}/comentarios": {
+      "get": {
+        "tags": [
+          "comentarios"
+        ],
+        "summary": "comentarios por id de cancion",
+        "description": "Trae un listado de comentarios de una cancion",
+        "operationId": "getComentarioByCancion",
+        "parameters": [
+          {
+            "name": "idCancion",
+            "in": "path",
+            "description": "El id de la cancion que se quiere recuperar los comentarios.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/listadoComentarios"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Comentario": {
+        "type": "object",
+        "properties": {
+          "id_comentario": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "autor": {
+            "type": "string",
+            "example": "Carlos"
+          },
+          "positivo": {
+            "type": "boolean",
+            "example": 1
+          },
+          "comentario": {
+            "type": "string",
+            "example": "Me encanta la cancion"
+          },
+          "id_cancion_fk": {
+            "type": "integer",
+            "format": "int64",
+            "example": 12
+          }
+        }
+      },
+      "ComentarioReqBody": {
+        "type": "object",
+        "properties": {
+          "autor": {
+            "type": "string",
+            "example": "Carlos"
+          },
+          "positivo": {
+            "type": "boolean",
+            "example": 1
+          },
+          "comentario": {
+            "type": "string",
+            "example": "Me encanta la cancion"
+          },
+          "id_cancion_fk": {
+            "type": "integer",
+            "format": "int64",
+            "example": 12
+          }
+        }
+      },
+      "listadoComentarios": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Comentario"
+        },
+        "example": [
+          {
+            "id_comentario": 1,
+            "autor": "Carlos",
+            "positivo": true,
+            "comentario": "Me encanta la canción",
+            "id_cancion_fk": 12
+          },
+          {
+            "id_comentario": 2,
+            "autor": "Ana",
+            "positivo": false,
+            "comentario": "No es de mi gusto",
+            "id_cancion_fk": 10
+          },
+          {
+            "id_comentario": 3,
+            "autor": "Luis",
+            "positivo": true,
+            "comentario": "Excelente interpretación",
+            "id_cancion_fk": 15
+          }
+        ]
+      }
+    },
+    "examples": {
+      "InvalidParameters": {
+        "summary": "Parámetros inválidos",
+        "value": {
+          "mensaje": "Los parámetros 'page' y 'limit' deben ser números enteros mayores o iguales a 1."
+        }
+      },
+      "NotFound": {
+        "summary": "No encontrado",
+        "value": {
+          "mensaje": "No se encontraron comentarios para la pagina 5."
+        }
+      },
+      "Unauthorized": {
+        "summary": "No autorizado",
+        "value": {
+          "mensaje": "No tienes permisos para esta operación."
+        }
+      }
+    },
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "token",
+        "in": "header"
+      }
+    }
+  }
+}
