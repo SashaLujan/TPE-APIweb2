@@ -47,6 +47,26 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "asc para ver de forma ascendente.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "desc asc"
+            }
+          },
+          {
+            "name": "column",
+            "in": "query",
+            "description": "El numero de pagina del listado de comentarios.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "id_columna autor positivo Comentario id_cancion_fk"
+            }
           }
         ],
         "responses": {
@@ -159,22 +179,22 @@
         "tags": [
           "comentarios"
         ],
-        "summary": "Update user",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "updateUser",
+        "summary": "Modificar comentario",
+        "description": "Modificar comentario de una cancion.",
+        "operationId": "modificarComentario",
         "parameters": [
           {
             "name": "idComentario",
             "in": "path",
-            "description": "name that need to be deleted",
+            "description": "id de comentario",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           }
         ],
         "requestBody": {
-          "description": "Update an existent user in the store",
+          "description": "esquema de comentario",
           "content": {
             "application/json": {
               "schema": {
@@ -184,8 +204,39 @@
           }
         },
         "responses": {
-          "default": {
-            "description": "successful operation"
+          "200": {
+            "description": "operacion exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comentario"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Faltan completar campos",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalidParameters": {
+                    "$ref": "#/components/examples/BadRequest"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe comentario con ese id",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalidParameters": {
+                    "$ref": "#/components/examples/NotFound"
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -238,7 +289,7 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "operacion exitosa",
             "content": {
               "application/json": {
                 "schema": {
@@ -248,10 +299,28 @@
             }
           },
           "400": {
-            "description": "Invalid username supplied"
+            "description": "Solicitud Mala",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalidParameters": {
+                    "$ref": "#/components/examples/BadRequest"
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "User not found"
+            "description": "No existe cancion para ese id",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalidParameters": {
+                    "$ref": "#/components/examples/NotFound"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -339,16 +408,28 @@
       }
     },
     "examples": {
+      "Created": {
+        "summary": "Recurso creado",
+        "value": {
+          "mensaje": "Se creo el recurso con exito."
+        }
+      },
+      "BadRequest": {
+        "summary": "Solicitud Mala",
+        "value": {
+          "mensaje": "La solicitud fue mal generada."
+        }
+      },
       "InvalidParameters": {
         "summary": "Parámetros inválidos",
         "value": {
-          "mensaje": "Los parámetros 'page' y 'limit' deben ser números enteros mayores o iguales a 1."
+          "mensaje": "Los parámetros no corresponden."
         }
       },
       "NotFound": {
         "summary": "No encontrado",
         "value": {
-          "mensaje": "No se encontraron comentarios para la pagina 5."
+          "mensaje": "No se encontraron resultados para el recurso solicitado."
         }
       },
       "Unauthorized": {

@@ -74,7 +74,7 @@ class ApiController {
 
     
         if(empty($autor) || empty($positivo) || empty($comentario) && empty($id_cancion)){
-            return $this->view->response("Faltan completar campos", 401);
+            return $this->view->response("Faltan completar campos", 400);
         }
 
         $editado = $this->modelComentarios->updateComentario($autor, $positivo, $comentario, $id_cancion, $id_comentario);
