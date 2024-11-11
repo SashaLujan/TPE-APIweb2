@@ -15,10 +15,32 @@ class ApiController {
         $this->view = new APIView();
     }
 
-    public function getAll(){
+    public function getAll($req){
 
-        $comentarios = $this->modelComentarios->getAll();
-        return $this->view->response($comentarios, 200);
+        $query = $req->query;
+
+        if(isset($query->page) && isset($query->limit)){
+
+            $this->getAllpaginated($query);
+
+        }elseif(isset($query->order)){
+            
+            if($query->order == "asc") {
+
+                $this->getAllAsc($query);
+
+            } elseif($query->order == "desc"){
+
+                $this->getAllDesc($query);
+
+            } else {
+                return $this->view->response("Valor de 'order' invalido ", 400);
+            }
+
+        } else {
+            $this->getAllAsc($query);
+        }
+
     }
 
     public function getAllByCancion($req){
@@ -61,5 +83,66 @@ class ApiController {
 
     }
 
+    private function checkColumn($column) {
+
+        $opcionesValidasColumn = ["id_comentario","autor","positivo","comentario","id_cancion_fk"];
+
+        // Verifica que la columna esté en la lista blanca
+        if (!in_array($column, $opcionesValidasColumn)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private function getAllAsc($query) {
+
+        if(isset($query->column)){
+            $valido = $this->checkColumn($query->column);
+            if($valido) {
+                $comentarios = $this->modelComentarios->getAllAsc($query->column);
+            } else {
+                return $this->view->response("Valor de parametro column invalido", 400);
+            }
+        } else {
+            $comentarios = $this->modelComentarios->getAllAsc("id_comentario");
+        }
+
+        return $this->view->response($comentarios, 200);
+    }
+
+    private function getAllDesc($query){
+
+        if(isset($query->column)){
+            $valido = $this->checkColumn($query->column);
+            if($valido) {
+                $comentarios = $this->modelComentarios->getAllDesc($query->column);
+            } else {
+                return $this->view->response("Valor de parametro column invalido", 400);
+            }
+        } else {
+            $comentarios = $this->modelComentarios->getAllDesc("id_comentario");
+        }
+
+        return $this->view->response($comentarios, 200);
+    }
+
+    private function getAllpaginated($query){
+
+        $page = (int)$query->page;
+        $limit = (int)$query->limit;
+        $offset = ($page-1) * $limit;
+
+        if ($page < 1 || $limit < 1){
+            return $this->view->response("Los parametros page y limit deben ser enteros y mayores o iguales a 1", 400);
+        }
+        $comentarios = $this->modelComentarios->getAllpaginated($offset,$limit);
+
+        if(empty($comentarios)){
+            return $this->view->response("No hay comentarios en la página $page", 404);
+        }else{
+            return $this->view->response($comentarios, 200);
+        }
+    }
 
 }
