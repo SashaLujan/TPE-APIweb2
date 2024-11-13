@@ -158,6 +158,19 @@ class ApiController {
     }
 
     //crear un comentario
+    public function create($req){
+        $autor = $req->body->autor;
+        $positivo = $req->body->positivo;
+        $comentario = $req->body->comentario;
+        $id_cancion = $req->body->id_cancion;
 
+        if(empty($autor) || empty($positivo) || empty($comentario) || empty($id_cancion)){
+            return $this->view->response("Faltan completar campos", 401);
+        }
+
+        $comentario = $this->modelComentarios->crearComentario($autor, $positivo, $comentario, $id_cancion);
+
+        return $this->view->response($comentario, 200);
+    }
 
 }

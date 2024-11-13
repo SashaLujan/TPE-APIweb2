@@ -45,10 +45,17 @@ class ComentariosModel extends Model{
         return $sentencia->execute([$autor, $positivo, $comentario, $id_cancion, $id_comentario]); // ejecuta
     }
 
+    //trae un comentario por id
     public function getComentario($id_comentario){
       $sentencia = $this->db->prepare("SELECT * FROM comentarios WHERE id_comentario=?");
       $sentencia->execute([$id_comentario]);
       $comentario = $sentencia->fetch(PDO::FETCH_OBJ);
       return $comentario;
+    }
+
+    //crea un comentario
+    public function crearComentario($autor, $positivo, $comentario, $id_cancion){
+        $sentencia = $this->db->prepare("INSERT INTO comentarios (autor, positivo, comentario, id_cancion) VALUES (?,?,?,?)");
+        return $sentencia->execute([$autor, $positivo, $comentario, $id_cancion]);
     }
 }
