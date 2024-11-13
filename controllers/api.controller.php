@@ -145,4 +145,19 @@ class ApiController {
         }
     }
 
+    //obtiene una cancion por id
+    public function get($req){
+        $id_comentario = $req->params->id;
+
+        $comentario = $this->modelComentarios->getComentario($id_comentario);
+
+        if(!$comentario){
+            return $this->view->response("No existe el comentario con el id : $id_comentario", 404);
+        }
+        return $this->view->response($comentario, 200);
+    }
+
+    //crear un comentario
+
+
 }

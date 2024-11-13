@@ -10,6 +10,7 @@ $router = new Router();
 $router->addRoute('canciones/:id/comentarios',        'GET',       'ApiController',         'getAllByCancion');
 $router->addRoute('comentarios',                      'GET',       'ApiController',         'getAll');
 $router->addRoute('comentarios/:id',                  'PUT',       'ApiController',         'update');
-
+$router->addRoute('comentarios/:id',                  'GET',       'ApiController',         'get');
+$router->addRoute('comentarios',                      'POST',      'ApiController',         'create');
 // rutea
 $router->route($_GET["resource"], $_SERVER['REQUEST_METHOD']);

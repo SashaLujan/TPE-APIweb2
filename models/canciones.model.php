@@ -15,6 +15,7 @@ class CancionesModel extends Model
         return $cancion;
     }
 
+    //trae todas las canciones
     public function getAll(){
 
         //Creamos la consulta para obtener todos los items
@@ -24,6 +25,7 @@ class CancionesModel extends Model
         return $canciones;
     }
 
+    //trae una cancion por id
     public function cancion($id){
 
         //Creamos la consulta para obtener la cancion

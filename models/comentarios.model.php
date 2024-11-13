@@ -46,6 +46,9 @@ class ComentariosModel extends Model{
     }
 
     public function getComentario($id_comentario){
-        
+      $sentencia = $this->db->prepare("SELECT * FROM comentarios WHERE id_comentario=?");
+      $sentencia->execute([$id_comentario]);
+      $comentario = $sentencia->fetch(PDO::FETCH_OBJ);
+      return $comentario;
     }
 }
