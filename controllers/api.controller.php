@@ -172,8 +172,4 @@ class ApiController {
         return $this->view->response($comentario, 200);
     }
     
-    //filtrar canciones por alguno de sus campos
-    public function filtrar($req){
-
-    }
 }
