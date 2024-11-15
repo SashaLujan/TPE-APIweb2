@@ -145,7 +145,7 @@ class ApiController {
         }
     }
 
-    //obtiene una cancion por id
+    //obtiene un comentario por id
     public function get($req){
         $id_comentario = $req->params->id;
 
@@ -159,12 +159,11 @@ class ApiController {
 
     //crear un comentario
     public function create($req){
-        $autor = $req->body->autor;
         $positivo = $req->body->positivo;
         $comentario = $req->body->comentario;
         $id_cancion = $req->body->id_cancion;
 
-        if(empty($autor) || empty($positivo) || empty($comentario) || empty($id_cancion)){
+        if(empty($positivo) || empty($comentario) || empty($id_cancion)){
             return $this->view->response("Faltan completar campos", 401);
         }
 
@@ -172,5 +171,9 @@ class ApiController {
 
         return $this->view->response($comentario, 200);
     }
+    
+    //filtrar canciones por alguno de sus campos
+    public function filtrar($req){
 
+    }
 }
