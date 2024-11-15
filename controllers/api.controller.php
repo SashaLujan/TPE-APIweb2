@@ -6,7 +6,8 @@ require_once 'views/api.view.php';
 
 class ApiController {
 
-    private $model;
+    private $modelCanciones;
+    private $modelComentarios;
     private $view;
 
     public function __construct() {
