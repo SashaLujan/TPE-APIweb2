@@ -7,7 +7,7 @@ $router = new Router();
 
 // define la tabla de ruteo
 #                 endpoint         verbo        controller                     método
-$router->addRoute('documentation',        'GET',       'DocumentationController',         'showDocumentation');
+$router->addRoute('v1',        'GET',       'DocumentationController',         'showDocumentation');
 
 // rutea
 $router->route($_GET["resource"], $_SERVER['REQUEST_METHOD']);
