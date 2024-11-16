@@ -11,6 +11,7 @@ class ApiController {
     private $view;
 
     public function __construct() {
+        
         $this->modelComentarios = new ComentariosModel();
         $this->modelCanciones = new CancionesModel();
         $this->view = new APIView();
@@ -20,11 +21,11 @@ class ApiController {
 
         $query = $req->query;
 
-        if(isset($query->page) && isset($query->limit)){
+        if(isset($query->page) && isset($query->limit)){ //paginacion
 
             $this->getAllpaginated($query);
 
-        }elseif(isset($query->order)){
+        }elseif(isset($query->order)){ //ordena asc o desc
             
             if($query->order == "asc") {
 
@@ -34,11 +35,19 @@ class ApiController {
 
                 $this->getAllDesc($query);
 
-            } else {
+            } 
+            else {
                 return $this->view->response("Valor de 'order' invalido ", 400);
             }
-
-        } else {
+        }
+        elseif (isset($query->positivo)) { // Filtro por campo positivo
+            if ($query->positivo === "1" || $query->positivo === "0") { // Validar valores aceptados
+                $this->getAllByPositivo($query);
+            } else {
+                return $this->view->response("El parámetro 'positivo' debe ser 1 o 0", 400);
+            }
+        }
+        else { // Sin parámetros, orden ascendente por defecto
             $this->getAllAsc($query);
         }
 
@@ -146,8 +155,19 @@ class ApiController {
         }
     }
 
+    private function getAllByPositivo($query) {
+        $isPositive = ($query->filter === "true") ? 1 : 0; // convierte a booleano
+        $comentarios = $this->modelComentarios->getAllFilter($isPositive);
+    
+        if (empty($comentarios)) {
+            return $this->view->response("No hay comentarios que coincidan con el filtro aplicado", 404);
+        } else {
+            return $this->view->response($comentarios, 200);
+        }
+    }
+
     //obtiene un comentario por id
-    public function get($req){
+    public function getCommentById($req){
         $id_comentario = $req->params->id;
 
         $comentario = $this->modelComentarios->getComentario($id_comentario);
@@ -168,7 +188,7 @@ class ApiController {
             return $this->view->response("Faltan completar campos", 401);
         }
 
-        $comentario = $this->modelComentarios->crearComentario($autor, $positivo, $comentario, $id_cancion);
+        $comentario = $this->modelComentarios->crearComentario($positivo, $comentario, $id_cancion);
 
         return $this->view->response($comentario, 200);
     }

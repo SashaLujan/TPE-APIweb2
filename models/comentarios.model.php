@@ -54,8 +54,14 @@ class ComentariosModel extends Model{
     }
 
     //crea un comentario
-    public function crearComentario($autor, $positivo, $comentario, $id_cancion){
-        $sentencia = $this->db->prepare("INSERT INTO comentarios (autor, positivo, comentario, id_cancion) VALUES (?,?,?,?)");
-        return $sentencia->execute([$autor, $positivo, $comentario, $id_cancion]);
+    public function crearComentario($positivo, $comentario, $id_cancion){
+        $sentencia = $this->db->prepare("INSERT INTO comentarios (positivo, comentario, id_cancion) VALUES (?,?,?,?)");
+        return $sentencia->execute([$positivo, $comentario, $id_cancion]);
+    }
+
+    public function getAllFilter($isPositive) {
+        $query = $this->db->prepare("SELECT * FROM comentarios WHERE positivo = ?");
+        $query->execute([$isPositive]);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 }
