@@ -156,7 +156,7 @@ class ApiController {
     }
 
     private function getAllByPositivo($query) {
-        $isPositive = ($query->filter === "true") ? 1 : 0; // convierte a booleano
+        $isPositive = ($query->positivo === "1") ? 1 : 0; // convierte a booleano
         $comentarios = $this->modelComentarios->getAllFilter($isPositive);
     
         if (empty($comentarios)) {
