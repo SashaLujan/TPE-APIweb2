@@ -9,15 +9,10 @@
     },
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "http://localhost/TPE-APIweb2/api"
-    }
-  ],
   "tags": [
     {
       "name": "comentarios",
-      "description": "comentarios anonimos de las canciones de tuletra"
+      "description": "Comentarios anonimos de las canciones de **tuletra**"
     }
   ],
   "paths": {
@@ -33,49 +28,110 @@
           {
             "name": "page",
             "in": "query",
-            "description": "El numero de pagina del listado de comentarios.",
+            "description": "Número de página para la paginación. **Obligatorio usar `limit`**.\n",
             "required": false,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "example": 1
             }
           },
           {
             "name": "limit",
             "in": "query",
-            "description": "La cantidad de comentarios por pagina.",
+            "description": "Cantidad de comentarios por página. **Obligatorio usar `page`**.\n",
             "required": false,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "example": 3
             }
           },
           {
             "name": "order",
             "in": "query",
-            "description": "asc para ver de forma ascendente.",
+            "description": "Orden de los resultados. Puede ser **\"asc\"** o **\"desc\"**. Si se especifica sin `column`, se usará la columna predeterminada.\n",
             "required": false,
             "schema": {
               "type": "string",
-              "example": "desc asc"
+              "enum": [
+                "asc",
+                "desc"
+              ]
             }
           },
           {
             "name": "column",
             "in": "query",
-            "description": "El numero de pagina del listado de comentarios.",
+            "description": "Columna para ordenar los resultados. Puede ser **\"id_comentario\", \"autor\", \"positivo\", \"comentario\" o \"id_cancion_fk\".**\nSi se especifica, **debe usarse con `order`**.\n",
             "required": false,
             "schema": {
               "type": "string",
-              "example": "id_columna autor positivo Comentario id_cancion_fk"
+              "enum": [
+                "id_comentario",
+                "autor",
+                "positivo",
+                "comentario",
+                "id_cancion_fk"
+              ]
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "Operación exitosa",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/listadoComentarios"
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_comentario": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                      },
+                      "autor": {
+                        "type": "string",
+                        "example": "Carlos"
+                      },
+                      "positivo": {
+                        "type": "boolean",
+                        "example": 1
+                      },
+                      "comentario": {
+                        "type": "string",
+                        "example": "Me encanta la cancion"
+                      },
+                      "id_cancion_fk": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 12
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "id_comentario": 1,
+                      "autor": "Carlos",
+                      "positivo": true,
+                      "comentario": "Me encanta la canción",
+                      "id_cancion_fk": 12
+                    },
+                    {
+                      "id_comentario": 2,
+                      "autor": "Ana",
+                      "positivo": false,
+                      "comentario": "No es de mi gusto",
+                      "id_cancion_fk": 10
+                    },
+                    {
+                      "id_comentario": 3,
+                      "autor": "Luis",
+                      "positivo": true,
+                      "comentario": "Excelente interpretación",
+                      "id_cancion_fk": 15
+                    }
+                  ]
                 }
               }
             }
@@ -86,19 +142,25 @@
               "application/json": {
                 "examples": {
                   "invalidParameters": {
-                    "$ref": "#/components/examples/InvalidParameters"
+                    "summary": "Parámetros inválidos",
+                    "value": {
+                      "mensaje": "Los parámetros no corresponden."
+                    }
                   }
                 }
               }
             }
           },
           "404": {
-            "description": "No existen comentarios para esa pagina",
+            "description": "No existen comentarios para esa página",
             "content": {
               "application/json": {
                 "examples": {
-                  "invalidParameters": {
-                    "$ref": "#/components/examples/NotFound"
+                  "notFound": {
+                    "summary": "No encontrado",
+                    "value": {
+                      "mensaje": "No se encontraron resultados para el recurso solicitado."
+                    }
                   }
                 }
               }
@@ -114,22 +176,65 @@
         "description": "Crear un nuevo comentario para una cancion.",
         "operationId": "createComment",
         "requestBody": {
-          "description": "Created user object",
+          "description": "Objeto para crear comentario",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ComentarioReqBody"
+                "type": "object",
+                "properties": {
+                  "autor": {
+                    "type": "string",
+                    "example": "Carlos"
+                  },
+                  "positivo": {
+                    "type": "boolean",
+                    "example": 1
+                  },
+                  "comentario": {
+                    "type": "string",
+                    "example": "Me encanta la cancion"
+                  },
+                  "id_cancion_fk": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 12
+                  }
+                }
               }
             }
           }
         },
         "responses": {
-          "default": {
-            "description": "successful operation",
+          "201": {
+            "description": "Operación exitosa",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Comentario"
+                  "type": "object",
+                  "properties": {
+                    "id_comentario": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 1
+                    },
+                    "autor": {
+                      "type": "string",
+                      "example": "Carlos"
+                    },
+                    "positivo": {
+                      "type": "boolean",
+                      "example": 1
+                    },
+                    "comentario": {
+                      "type": "string",
+                      "example": "Me encanta la cancion"
+                    },
+                    "id_cancion_fk": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 12
+                    }
+                  }
                 }
               }
             }
@@ -142,7 +247,7 @@
         "tags": [
           "comentarios"
         ],
-        "summary": "comentario por su id",
+        "summary": "Comentario por su id",
         "description": "Trae un comentario por su id",
         "operationId": "getComentarioById",
         "parameters": [
@@ -158,20 +263,68 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "Operación exitosa",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Comentario"
+                  "type": "object",
+                  "properties": {
+                    "id_comentario": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 1
+                    },
+                    "autor": {
+                      "type": "string",
+                      "example": "Carlos"
+                    },
+                    "positivo": {
+                      "type": "boolean",
+                      "example": 1
+                    },
+                    "comentario": {
+                      "type": "string",
+                      "example": "Me encanta la cancion"
+                    },
+                    "id_cancion_fk": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 12
+                    }
+                  }
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid username supplied"
+            "description": "Parámetros inválidos",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalidParameters": {
+                    "summary": "Solicitud Mala",
+                    "value": {
+                      "mensaje": "La solicitud fue mal generada."
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "User not found"
+            "description": "Comentario no encontrado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalidParameters": {
+                    "summary": "No encontrado",
+                    "value": {
+                      "mensaje": "No se encontraron resultados para el recurso solicitado."
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -194,22 +347,65 @@
           }
         ],
         "requestBody": {
-          "description": "esquema de comentario",
+          "description": "Objeto para crear comentario",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ComentarioReqBody"
+                "type": "object",
+                "properties": {
+                  "autor": {
+                    "type": "string",
+                    "example": "Carlos"
+                  },
+                  "positivo": {
+                    "type": "boolean",
+                    "example": 1
+                  },
+                  "comentario": {
+                    "type": "string",
+                    "example": "Me encanta la cancion"
+                  },
+                  "id_cancion_fk": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 12
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "operacion exitosa",
+            "description": "Operación exitosa",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Comentario"
+                  "type": "object",
+                  "properties": {
+                    "id_comentario": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 1
+                    },
+                    "autor": {
+                      "type": "string",
+                      "example": "Carlos"
+                    },
+                    "positivo": {
+                      "type": "boolean",
+                      "example": 1
+                    },
+                    "comentario": {
+                      "type": "string",
+                      "example": "Me encanta la cancion"
+                    },
+                    "id_cancion_fk": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 12
+                    }
+                  }
                 }
               }
             }
@@ -220,7 +416,10 @@
               "application/json": {
                 "examples": {
                   "invalidParameters": {
-                    "$ref": "#/components/examples/BadRequest"
+                    "summary": "Solicitud Mala",
+                    "value": {
+                      "mensaje": "La solicitud fue mal generada."
+                    }
                   }
                 }
               }
@@ -232,38 +431,14 @@
               "application/json": {
                 "examples": {
                   "invalidParameters": {
-                    "$ref": "#/components/examples/NotFound"
+                    "summary": "No encontrado",
+                    "value": {
+                      "mensaje": "No se encontraron resultados para el recurso solicitado."
+                    }
                   }
                 }
               }
             }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "comentarios"
-        ],
-        "summary": "Delete user",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "deleteUser",
-        "parameters": [
-          {
-            "name": "idComentario",
-            "in": "path",
-            "description": "The name that needs to be deleted",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid username supplied"
-          },
-          "404": {
-            "description": "User not found"
           }
         }
       }
@@ -273,7 +448,7 @@
         "tags": [
           "comentarios"
         ],
-        "summary": "comentarios por id de cancion",
+        "summary": "Comentarios por id de cancion",
         "description": "Trae un listado de comentarios de una cancion",
         "operationId": "getComentarioByCancion",
         "parameters": [
@@ -289,11 +464,61 @@
         ],
         "responses": {
           "200": {
-            "description": "operacion exitosa",
+            "description": "Operación exitosa",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/listadoComentarios"
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_comentario": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                      },
+                      "autor": {
+                        "type": "string",
+                        "example": "Carlos"
+                      },
+                      "positivo": {
+                        "type": "boolean",
+                        "example": 1
+                      },
+                      "comentario": {
+                        "type": "string",
+                        "example": "Me encanta la cancion"
+                      },
+                      "id_cancion_fk": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 12
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "id_comentario": 1,
+                      "autor": "Carlos",
+                      "positivo": true,
+                      "comentario": "Me encanta la canción",
+                      "id_cancion_fk": 12
+                    },
+                    {
+                      "id_comentario": 2,
+                      "autor": "Ana",
+                      "positivo": false,
+                      "comentario": "No es de mi gusto",
+                      "id_cancion_fk": 10
+                    },
+                    {
+                      "id_comentario": 3,
+                      "autor": "Luis",
+                      "positivo": true,
+                      "comentario": "Excelente interpretación",
+                      "id_cancion_fk": 15
+                    }
+                  ]
                 }
               }
             }
@@ -304,7 +529,10 @@
               "application/json": {
                 "examples": {
                   "invalidParameters": {
-                    "$ref": "#/components/examples/BadRequest"
+                    "summary": "Solicitud Mala",
+                    "value": {
+                      "mensaje": "La solicitud fue mal generada."
+                    }
                   }
                 }
               }
@@ -316,7 +544,10 @@
               "application/json": {
                 "examples": {
                   "invalidParameters": {
-                    "$ref": "#/components/examples/NotFound"
+                    "summary": "No encontrado",
+                    "value": {
+                      "mensaje": "No se encontraron resultados para el recurso solicitado."
+                    }
                   }
                 }
               }
@@ -380,7 +611,31 @@
       "listadoComentarios": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/Comentario"
+          "type": "object",
+          "properties": {
+            "id_comentario": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1
+            },
+            "autor": {
+              "type": "string",
+              "example": "Carlos"
+            },
+            "positivo": {
+              "type": "boolean",
+              "example": 1
+            },
+            "comentario": {
+              "type": "string",
+              "example": "Me encanta la cancion"
+            },
+            "id_cancion_fk": {
+              "type": "integer",
+              "format": "int64",
+              "example": 12
+            }
+          }
         },
         "example": [
           {
