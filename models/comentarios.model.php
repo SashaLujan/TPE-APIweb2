@@ -55,7 +55,7 @@ class ComentariosModel extends Model{
 
     //crea un comentario
     public function crearComentario($autor,$positivo, $comentario, $id_cancion){
-        $sentencia = $this->db->prepare("INSERT INTO comentarios (autor, positivo, comentario, id_cancion) VALUES (?,?,?,?)");
+        $sentencia = $this->db->prepare("INSERT INTO comentarios (autor, positivo, comentario, id_cancion_fk) VALUES (?,?,?,?)");
         return $sentencia->execute([$autor,$positivo, $comentario, $id_cancion]);
     }
 
