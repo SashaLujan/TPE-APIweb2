@@ -84,7 +84,7 @@ class ApiController {
 
     
         if(empty($autor) || empty($comentario) || empty($id_cancion) || !isset($positivo) || ($positivo !== true && $positivo !== false)){
-            return $this->view->response("Debe completar todos los campos asegurandose a su vez que el valor de positivo sea 1 o 0", 400);
+            return $this->view->response("Debe completar todos los campos asegurandose a su vez que el valor de positivo sea true o false", 400);
         }
 
         $existeCancion = $this->modelCanciones->cancion($id_cancion);
