@@ -73,6 +73,15 @@
                 "id_cancion_fk"
               ]
             }
+          },
+          {
+            "name": "positivo",
+            "in": "query",
+            "description": "Filtro por campo positivo. Puede ser `true` o `false`.\n",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
