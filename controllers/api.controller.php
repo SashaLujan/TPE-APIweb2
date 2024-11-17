@@ -83,7 +83,7 @@ class ApiController {
         $id_cancion = $req->body->id_cancion;
 
     
-        if(empty($autor) || empty($comentario) || empty($id_cancion) || !isset($positivo) || ($positivo !== true && $positivo !== false)){
+        if(empty($autor) || empty($comentario) || empty($id_cancion) || !isset($positivo) || ($positivo != true && $positivo != false)){
             return $this->view->response("Debe completar todos los campos asegurandose a su vez que el valor de positivo sea true o false", 400);
         }
 
