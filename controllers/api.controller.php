@@ -83,8 +83,14 @@ class ApiController {
         $id_cancion = $req->body->id_cancion;
 
     
-        if(empty($autor) || empty($positivo) || empty($comentario) && empty($id_cancion)){
-            return $this->view->response("Faltan completar campos", 400);
+        if(empty($autor) || empty($comentario) || empty($id_cancion) || !isset($positivo) || ($positivo !== true && $positivo !== false)){
+            return $this->view->response("Debe completar todos los campos asegurandose a su vez que el valor de positivo sea 1 o 0", 400);
+        }
+
+        $existeCancion = $this->modelCanciones->cancion($id_cancion);
+
+        if(!$existeCancion){
+            return $this->view->response("No existe la cancion", 404);
         }
 
         $editado = $this->modelComentarios->updateComentario($autor, $positivo, $comentario, $id_cancion, $id_comentario);
